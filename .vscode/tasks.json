@@ -1,0 +1,145 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+			"type": "shell",
+			"label": "Compile Library Win32 (debug)",
+			"command": "clang++",
+			"args": [
+				"-std=c++20",
+				"-fcolor-diagnostics",
+				"-fansi-escape-codes",
+				"-m32",
+                "-Wall",
+				"-g",
+				"-c",
+				"${workspaceFolder}\\Library\\*.cpp",
+				
+				"-I",
+				"${workspaceFolder}\\Library"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}\\build\\Library\\Win32\\Temp"
+			},
+			"group": "build",
+			
+		},
+        {
+			"type": "shell",
+			"label": "Link Library Win32 (debug)",
+			"command": "LLVM-ar",
+			"args": [
+				"rcs",
+				"${workspaceFolder}\\Build\\Library\\Win32\\Debug\\MyLibrary.lib",
+
+				"${workspaceFolder}\\Build\\Library\\Win32\\Temp\\*.o",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build",
+		},
+        {
+			"type": "shell",
+			"label": "Compile App Win32 (debug)",
+			"command": "clang++",
+			"args": [
+				"-std=c++20",
+				"-fcolor-diagnostics",
+				"-fansi-escape-codes",
+				"-m32",
+                "-Wall",
+				"-g",
+				"-c",
+				"${workspaceFolder}\\App\\*.cpp",
+				
+				"-I",
+				"${workspaceFolder}\\Library"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}\\build\\App\\Win32\\Temp"
+			},
+			"group": "build",
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"relative",
+					"${workspaceRoot}"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+	  		}
+		},
+		{
+			"type": "shell",
+			"label": "Link App Win32 (debug)",
+			"command": "clang++",
+			"args": [
+				"-std=c++20",
+				"-fcolor-diagnostics",
+				"-fansi-escape-codes",
+				"-m32",
+                "-Wall",
+				"${workspaceFolder}\\Build\\App\\Win32\\Temp\\*.o",
+
+				"-o",
+				"${workspaceFolder}\\Build\\App\\Win32\\Debug\\MyApp.exe",
+				
+				"-L",
+				"${workspaceFolder}\\Build\\Library\\Win32\\Debug",
+
+				"-l",
+				"MyLibrary",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build",
+		},
+		{
+            "type": "shell",
+            "label": "Clean Library (debug)",
+            "command": "del",
+            "args": [
+				"/Q",
+                "${workspaceFolder}\\Build\\Library\\Win32\\Temp\\*",
+				"${workspaceFolder}\\Build\\Library\\Win32\\Debug\\*"
+            ],
+			"problemMatcher": []
+        },
+		{
+            "type": "shell",
+            "label": "Clean App (debug)",
+            "command": "del",
+            "args": [
+				"/Q",
+                "${workspaceFolder}\\Build\\App\\Win32\\Temp\\*",
+				"${workspaceFolder}\\Build\\App\\Win32\\Debug\\*"
+            ],
+			"problemMatcher": []
+        },
+		{
+            "label": "Full Build Win32 Debug",
+			"dependsOrder": "sequence",
+            "dependsOn": [
+				"Clean Library (debug)",
+				"Clean App (debug)",
+                "Compile Library Win32 (debug)",
+                "Link Library Win32 (debug)",
+				"Compile App Win32 (debug)",
+                "Link App Win32 (debug)",
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+    ]
+}
