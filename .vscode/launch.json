@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\Build\\App\\Win32\\Debug\\MyApp",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}\\Build\\App\\Win32\\Debug",
+            "environment": [],
+            "console": "externalTerminal"
+        },
+        {
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
