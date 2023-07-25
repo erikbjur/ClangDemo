@@ -9,4 +9,5 @@ int main() {
     myEntity->Name = "My Name";
 
     myEntity->PrintName();
+    return 0;
 }
